@@ -287,7 +287,7 @@ void test_filter()
 }
 
 long double reduce_op_sum(long double v1, double v2) { return v1 + v2; }
-void test_reduce() 
+void test_reduce()
 {
     line test4_ = {1, NULL};
 
@@ -308,6 +308,40 @@ void test_reduce()
     long double act2 = 1.234;
     long double act3 = 0.;
     long double act4 = 0.;
+
+    TEST_ASSERT_EQUAL_MESSAGE(act0, res0, "0");
+    TEST_ASSERT_EQUAL_MESSAGE(act1, res1, "1");
+    TEST_ASSERT_EQUAL_MESSAGE(act2, res2, "2");
+    TEST_ASSERT_EQUAL_MESSAGE(act3, res3, "3");
+    TEST_ASSERT_EQUAL_MESSAGE(act4, res4, "4");
+
+    free_line(test0);
+    free_line(test1);
+    free_line(test2);
+}
+
+double reduce_op_sum_d(double v1, double v2) { return v1 + v2; }
+void test_reduce_d()
+{
+    line test4_ = {1, NULL};
+
+    line *test0 = line_make(5, -1., 0.25, 3., -4., 5.67);
+    line *test1 = line_make(0);
+    line *test2 = line_make(1, 1.234);
+    line *test3 = NULL;
+    line *test4 = &test4_;
+
+    double res0 = line_reduce_d(test0, reduce_op_sum_d);
+    double res1 = line_reduce_d(test1, reduce_op_sum_d);
+    double res2 = line_reduce_d(test2, reduce_op_sum_d);
+    double res3 = line_reduce_d(test3, reduce_op_sum_d);
+    double res4 = line_reduce_d(test4, reduce_op_sum_d);
+
+    double act0 = 3.92;
+    double act1 = 0.;
+    double act2 = 1.234;
+    double act3 = 0.;
+    double act4 = 0.;
 
     TEST_ASSERT_EQUAL_MESSAGE(act0, res0, "0");
     TEST_ASSERT_EQUAL_MESSAGE(act1, res1, "1");
@@ -584,6 +618,7 @@ int main()
     RUN_TEST(test_concat);
     RUN_TEST(test_map);
     RUN_TEST(test_reduce);
+    RUN_TEST(test_reduce_d);
     RUN_TEST(test_filter);
     RUN_TEST(test_select);
     RUN_TEST(test_slice);

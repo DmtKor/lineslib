@@ -301,6 +301,21 @@ long double line_reduce(line *l, long double (*op)(long double, double))
     return res;
 }
 
+double line_reduce_d(line *l, double (*op)(double, double))
+{
+    // Maybe op should handle len=0 and len=1 cases?
+    if (l == NULL || l->data == NULL || l->len == 0)
+        return 0;
+    if (l->len == 1)
+        return l->data[0];
+    double res = l->data[0];
+    for (size_t i = 1; i < l->len; i++)
+    {
+        res = op(res, l->data[i]);
+    }
+    return res;
+}
+
 line *line_combine(line *l1, line *l2, double (*op)(double, double))
 {
     if (l1 == NULL ||

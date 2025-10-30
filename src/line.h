@@ -97,12 +97,20 @@ if len = 0, returns NULL
 int *line_filter(line *l, int (*filter)(double));
 
 /*
-reduces line values to a single one
+reduces line values to a single one (long double)
 for example, with op being ... { return val1 + val2 } you'll get sum of all elements
 when l is empty, returns 0
 when l has one value, returns this value without changing it
 */
 long double line_reduce(line *l, long double (*op)(long double, double));
+
+/*
+reduces line values to a single one (double)
+for example, with op being ... { return val1 + val2 } you'll get sum of all elements
+when l is empty, returns 0
+when l has one value, returns this value without changing it
+*/
+double line_reduce_d(line *l, double (*op)(double, double));
 
 /*
 internal function, counts non-zero elements in int array
