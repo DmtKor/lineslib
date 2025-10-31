@@ -93,7 +93,7 @@ Internal
 
 Returns 0 if table pass
 */
-short check_table(table *t, short check_null, short check_data_null, short check_r_gt0, short check_c_gt1);
+short check_table(table *t, short check_null, short check_data_null, short check_r_gt0, short check_c_gt1, short check_lines);
 
 /*
 Free table data (including table *pointer)
@@ -108,12 +108,12 @@ Returns pointer to new table on success, NULL otherwise
 table *table_copy(table *t);
 
 /*
-Add new row at index ind, all existing rows starting from ind will be moved downwards
+Add new row to end
 You should free row afterwards
 
 Returns 0 on success, 1 otherwise
 */
-short table_rowadd(table *t, line *row, size_t ind);
+short table_rowadd_toend(table *t, line *row);
 
 /*
 Add new col at index ind, all existing cols starting from ind will be moved to right
@@ -123,13 +123,12 @@ Returns 0 on success, 1 otherwise
 short table_coladd(table *t, line *col, size_t ind);
 
 /*
-Add new rows at indices ind
-Rows are added starting from ind[0], every time table_rowadd is called
+Add new rows to end
 You should free rows and its elements afterwards
 
 Returns 0 on success, 1 otherwise
 */
-short table_rowsadd(table *t, line **rows, size_t *ind, size_t n);
+short table_rowsadd_toend(table *t, line **rows, size_t n);
 
 /*
 Add new cols at indices ind
@@ -138,23 +137,6 @@ Cols are added starting from ind[0], every time table_coladd is called
 Returns 0 on success, 1 otherwise
 */
 short table_colsadd(table *t, line **cols, size_t *ind, size_t n);
-
-/*
-Add new rows at index ind
-Rows are added in the same order into ind[0], ..., ind[n-1]
-You should free rows and its elements afterwards
-
-Returns 0 on success, 1 otherwise
-*/
-short table_rowsadd_ind(table *t, line **rows, size_t ind, size_t n);
-
-/*
-Add new cols at index ind
-Cols are added in the same order into ind[0], ..., ind[n-1]
-
-Returns 0 on success, 1 otherwise
-*/
-short table_colsadd_ind(table *t, line **cols, size_t ind, size_t n);
 
 /*
 Remove row by index
@@ -201,7 +183,7 @@ short table_colsrm_ind(table *t, size_t ind, size_t start, size_t end);
 /*
 Compare two tables
 
-Returns -1 on error, 0 on equal, 1 on not equal
+Returns 0 on equal, 1 on not equal
 */
 short table_compare(table *t1, table *t2);
 
@@ -281,7 +263,7 @@ table *table_slice(table *t, size_t r_from, size_t r_to, int r_step, size_t c_fr
 /*
 Print table
 */
-void *table_print(table *t);
+void table_print(table *t);
 
 /*
 Make (dyn. all.) table of filter(col) values for each col
@@ -309,4 +291,4 @@ Make new table from rows with non-zero filter(row) values
 
 Returns pointer to the new table on success, NULL otherwise
 */
-table *select_cols(table *t, int (*filter)(line *));
+table *select_rows(table *t, int (*filter)(line *));
